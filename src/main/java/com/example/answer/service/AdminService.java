@@ -23,4 +23,8 @@ public class AdminService {
         }
         return false;
     }
+    public List<Admin> addAdmin(Admin admin){
+        adminRepository.save(admin);
+        return  adminRepository.findAll();
+    }
 }

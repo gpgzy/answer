@@ -9,8 +9,9 @@
 
             padding: 20px;
             text-align: center;
-            margin-left: 27%;
-            margin-top: 2%;
+            margin-left: 20%;
+            margin-right: 20%;
+            margin-top: 1%;
             background-color: white;
         }
         .top{
@@ -21,33 +22,55 @@
         table{
             border-collapse: collapse;
         }
-        td{
+        td {
             margin: 5px;
             padding: 5px 10px 5px 10px;
             border: 1px  solid gray;
         }
-        a{
-            margin-left: 10px;
-            margin-right: 10px;
+        .butt{
+            text-align:center;
+            background-color: rgb(245, 41, 27);
+            border-radius: 10px;
+            opacity: 85%;
+            border: none;
+            color: white;
+            padding: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+            margin: 20px;
+            width: 100px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .title{
+            margin-left: 5px;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+        .title1{
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 <div class="top">
-    <a>最高分：${max}</a>
-    <a>最低分：${min}</a>
-    <a>平均分：${aver}</a>
+    <a class="title">最高分：${max}</a>
+    <a class="title">最低分：${min}</a>
+    <a class="title">平均分：${aver}</a>
+    <a class="title">参与人数：${list?size}</a>
 </div>
 <div class="center">
     <table>
         <tr>
-            <td>序号</td>
-            <td>姓名</td>
-            <td>身份证号</td>
-            <td>党工委</td>
-            <td>党支部</td>
-            <td>电话号码</td>
-            <td>得分</td>
+            <td><a class="title1">序号</a></td>
+            <td><a class="title1">姓 名</a></td>
+            <td><a class="title1">身份证号</a></td>
+            <td><a class="title1">党工委</a></td>
+            <td><a class="title1">党支部</a></td>
+            <td><a class="title1">电话号码</a></td>
+            <td><a class="title1">得分</a></td>
+            <td><a class="title1">历史得分</a></td>
+            <td><a class="title1">答题次数</a></td>
         </tr>
        <#assign i = 0/>
         <#list list as s>
@@ -62,9 +85,13 @@
                 <td>${s.branch}</td>
                 <td>${s.telNo}</td>
                 <td>${s.maxScore}</td>
+                <td><#list s.scoreList as sc >${ sc.scores+" "}</#list></td>
+                <td>${s.scoreList?size}</td>
             </tr>
         </#list>
     </table>
+    <br>
+    <a href="/api/admin/search" class="butt">返回</a>
     </div>
 
 </body>

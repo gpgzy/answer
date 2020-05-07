@@ -4,9 +4,9 @@
   <meta charset="utf-8">
     <title>登录</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+    <meta name="viewport" content="width=device-width,initial-scale=0.9,minimum-scale=0.8, maximum-scale=1.2,user-scalable=yes">
     <link rel="icon" href="/static/favicon.ico">
-   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
-      <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script >
         function getVerify(obj){
 
@@ -92,10 +92,13 @@
         background-color: white;
         border-radius: 10px;
         border: 1px solid whitesmoke;
-        width: 40%;
-        margin-left: 28%;
+        /*width: 40%;*/
+        /*margin-left: 28%;*/
+        width: 30rem;
+        margin-right: auto;
+        margin-left: auto;
         /*height: 120%;*/
-        margin-top: 3%;
+        margin-top: 4%;
         text-align: center;
     }
 

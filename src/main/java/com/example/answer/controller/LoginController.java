@@ -1,5 +1,6 @@
 package com.example.answer.controller;
 
+import com.example.answer.component.IpUtil;
 import com.example.answer.component.LoginJudgeUtil;
 import com.example.answer.component.TimeUtil;
 import com.example.answer.entity.JudgeQuestion;
@@ -57,6 +58,7 @@ public class LoginController {
             }
             else if (random.equals(inputStr)) {
                 log.debug("true");
+                log.debug(IpUtil.getIpAddr(request));
                 request.getSession().setAttribute("user",user);
                 if(userService.findUserByIdCard(idCard)==null)
                 {

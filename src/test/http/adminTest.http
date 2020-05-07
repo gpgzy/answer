@@ -1,0 +1,37 @@
+POST http://localhost:8080/api/admin/addadmin
+Content-Type: application/json
+
+{
+"username":"gzy",
+"password":"123456"
+}
+###
+POST http://localhost:8080/api/admin/addSingle
+Content-Type: application/json
+
+{
+"question":"企业违反（ ），侵犯职工劳动权益的，工会可以依法要求（ ）承担责任",
+"selectA": "企业",
+"selectB":"用人单位",
+"selectC": "侵权者"
+}
+
+###
+POST  http://localhost:8080/api/admin/addMany
+Content-Type: application/json
+
+{
+  "question":"做好员工健康管理。各单位要切实掌握员工流动情况，按照当地要求分区分类进行健康管理，对来自疫情严重地区的人员实行____或____",
+  "selectA": "居家",
+  "selectB":"劝返",
+  "selectC": "集中隔离医学观察"}
+
+###
+POST  http://localhost:8080/api/admin/addJudge
+Content-Type: application/json
+
+{
+  "question":"面向对象编程具有很多优点点"
+}
+
+###
