@@ -59,10 +59,29 @@
         <p>党工委查询</p>
         党工委
         <select  name="committee">
-
-            <option  >市直工委</option>
-            <option  >教育工委</option>
-            <option  >工信工委</option>
+            <option>东城街街道党工委</option>
+            <option>南城街街道党工委</option>
+            <option>北城街街道党工委</option>
+            <option>米山镇党委</option>
+            <option>三甲镇党委</option>
+            <option>神农镇党委</option>
+            <option>陈区镇党委</option>
+            <option>建宁乡党委</option>
+            <option>北诗镇党委</option>
+            <option>石末乡党委</option>
+            <option>河西镇党委</option>
+            <option>马村镇党委</option>
+            <option>原村乡党委</option>
+            <option>野川镇党委</option>
+            <option>寺庄镇党委</option>
+            <option>永禄乡党委</option>
+            <option>市直工委</option>
+            <option>工信工委</option>
+            <option>教育工委</option>
+            <option>非公工委</option>
+            <option>公安局党委</option>
+            <option>老干局党委</option>
+            <option>开发区党工委</option>
         </select><br>
         <button type="submit">查询</button>
     </form>
@@ -71,9 +90,9 @@
         党工委
         <select id="committee"  name="committee" onChange="move()">
             <option selected>请选择</option>
-            <option  >市直工委</option>
-            <option  >教育工委</option>
-            <option  >工信工委</option>
+            <option  >党工委1</option>
+            <option  >党工委2</option>
+            <option  >党工委3</option>
         </select>
         <br>
         党支部
@@ -93,17 +112,17 @@
 
         var add;
 
-        if (YiJi.value == "市直工委") {
+        if (YiJi.value == "党工委1") {
 
-            add = new Array("市委办", "组织部", "政府办"); //对比value值，实现对应二级text值的动态生成
+            add = new Array("支部1-1", "支部1-2", "支部1-3"); //对比value值，实现对应二级text值的动态生成
 
-        } else if (YiJi.value == "教育工委") {
+        } else if (YiJi.value == "党工委2") {
 
-            add = new Array("高平一中", "高平二中", "高平三中", "高平四中");
+            add = new Array("支部2-1", "支部2-2");
 
-        } else if (YiJi.value == "工信工委") {
+        } else if (YiJi.value == "党工委3") {
 
-            add = new Array("财政局", "工信局", "科兴集团");
+            add = new Array("支部3-1", "支部3-2");
 
         } else if (YiJi.value == "YiJi") {
 

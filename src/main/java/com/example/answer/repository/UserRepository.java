@@ -16,8 +16,8 @@ public interface UserRepository extends BaseRepository<User,Integer> {
     @Query("update User u set u.maxScore =:max where u.id =:id")
     int updateMaxScoreById(@Param("max") int max,@Param("id") int id);
     User findById(@Param("id") int id);
-    @Query("select u from User u where u.committee=:committee")
-    List<User> findByCommittee(@Param("committee")String committee);
-    @Query("select u from User u where u.branch=:branch")
-    List<User> findByBranch(@Param("branch")String branch);
+    @Query("select u from User u where u.branch.committees.id=:cid")
+    List<User> findByCommitteeId(@Param("cid") int cid);
+    @Query("select u from User u where u.telNo=:tel")
+    User findByTelNo(@Param("tel") String tel);
 }

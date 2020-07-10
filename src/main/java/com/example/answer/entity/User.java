@@ -19,12 +19,13 @@ public class User {
     private Integer id;
     private String name;
     private String idCard;
-    private String committee;
-    private String branch;
     private String telNo;
     @OneToMany(mappedBy = "user")
-   private List<Score> scoreList;
+    private List<Score> scoreList;
     private Integer maxScore;
+    @ManyToOne
+    private Branch branch;
+    private String identity;//党内的身份
     @Column(columnDefinition = "timestamp default current_timestamp ",
             insertable = false, updatable = false)
     private LocalDateTime insertTime;

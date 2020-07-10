@@ -26,8 +26,13 @@ public class AdminController {
         return "adminLogin";
     }
     @GetMapping("/api/admin/test")
-    public String testIndex(){
-        return "mobilelogin";
+    public String testIndex(HttpServletRequest request){
+        request.setAttribute("name","丁玉栋");
+        request.setAttribute("score",96);
+        request.setAttribute("year",2020);
+        request.setAttribute("day",7);
+        request.setAttribute("month",7);
+        return "score";
     }
     @GetMapping("")
     public String init(){
@@ -52,20 +57,17 @@ public class AdminController {
     }
     @GetMapping("/api/admin/findByCommittee")
     public String findByCommittee(@RequestParam String committee,HttpServletRequest request){
-        List<User> list = userService.getAll(committee);
-        request.setAttribute("list",list);
-        request.setAttribute("max",userService.maxScore(list));
-        request.setAttribute("min",userService.minScore(list));
-        request.setAttribute("aver",df.format(userService.averScore(list)));
+
         return "alluser";
     }
     @GetMapping("/api/admin/findByBranch")
     public String findByBranch(@RequestParam String branch,@RequestParam String committee,HttpServletRequest request ){
-        List<User> list = userService.getAll(committee,branch);
-        request.setAttribute("list",list);
-        request.setAttribute("max",userService.maxScore(list));
-        request.setAttribute("min",userService.minScore(list));
-        request.setAttribute("aver",df.format(userService.averScore(list)));
+
         return "alluser";
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        request.getSession().removeAttribute("admin");
+        return "adminLogin";
     }
 }

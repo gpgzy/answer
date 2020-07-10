@@ -15,6 +15,12 @@ public class Admin {
     private Integer id;
     private String username;
     private String password;
+    public enum Role{
+        GOV,COMMITTEE,SUPER
+    }
+    private Role role;
+    @OneToOne
+    private Committee committee;
     @Column(columnDefinition = "timestamp default current_timestamp ",
             insertable = false, updatable = false)
     private LocalDateTime insertTime;

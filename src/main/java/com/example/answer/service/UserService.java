@@ -25,10 +25,8 @@ public class UserService {
      * @param user
      * @return
      */
-    public List<User> addUser(User user){
+    public void addUser(User user){
         userRepository.save(user);
-        log.debug("insert user"+user.getName());
-        return userRepository.findAll();
     }
     public User findUserByIdCard(String idCard){
         User user = userRepository.findByIdCard(idCard);
@@ -39,18 +37,11 @@ public class UserService {
         UserUtil userUtil = new UserUtil();
         return userRepository.updateMaxScoreById(userUtil.maxScore(user.getScoreList()),id);
     }
-    public List<Score> addScore(Score score){
+    public void addScore(Score score){
         scoreRepository.save(score);
-        return scoreRepository.findAll();
     }
     public List<User> getAll(){
         return userRepository.findAll();
-    }
-    public List<User> getAll(String committee){
-        return userRepository.findByCommittee(committee);
-    }
-    public List<User> getAll(String committee,String branch){
-        return userRepository.findByBranch(branch);
     }
     public int maxScore(List<User> list){
         if (list.size()==0)
@@ -94,5 +85,11 @@ public class UserService {
             return aver;
         }
 
+    }
+    public List<User> getByCommittee(int cid){
+        return userRepository.findByCommitteeId(cid);
+    }
+    public User getByTel(String tel){
+        return userRepository.findByTelNo(tel);
     }
 }

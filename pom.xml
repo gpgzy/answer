@@ -96,9 +96,17 @@
                 <directory>src/main/webapp</directory>
                 <targetPath>/WEB-INF</targetPath>
             </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                                <includes>-->
+<!--                                    <include>**/*.jpg</include>-->
+<!--                                    <include>**/*.ico</include>-->
+<!--                                    <include>**/*.properties</include>-->
+<!--                                    <include>**/*.ftl</include>-->
+<!--                                    <include>**/*.css</include>-->
+<!--                                    <include>**/*.js</include>-->
+<!--                                </includes>-->
+<!--            </resource>-->
         </resources>
         <plugins>
             <plugin>

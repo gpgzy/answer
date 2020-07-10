@@ -1,73 +1,91 @@
 package com.example.answer.controller;
 
+import com.example.answer.component.EncryptComponent;
 import com.example.answer.component.TimeUtil;
 import com.example.answer.entity.*;
 import com.example.answer.service.QuestionService;
 import com.example.answer.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/")
+@Slf4j
 public class UserController {
     @Autowired
     private QuestionService questionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EncryptComponent encryptComponent;
     @PostMapping("submit")
-    public String getAnswer(@RequestParam String idCard, HttpServletRequest request){
+    public String getAnswer(@RequestParam String tel, HttpServletRequest request, HttpServletResponse response){
         int sum = 0;
-        User user = userService.findUserByIdCard(idCard);
+        User user = userService.getByTel(tel);
         String answer;
-        List<SingleQuestion> singleQuestions = questionService.getAllSingle();
-        for (SingleQuestion single: singleQuestions) {
-            answer = request.getParameter(single.getId()+"");
-            if (answer!=null&& answer.equals(single.getCorrectSelect()))
-            {
-                sum++;
+        String question =request.getParameter("question") ;
+        //log.debug(question);
+        MyToken token = encryptComponent.decryptToken(question);
+        Set<Integer> set =token.getSingle();
+        Set<Integer> judgeSet = token.getJudge();
+        Set<Integer> manySet = token.getMany();
+//        request.getSession().removeAttribute("singleset");
+//        request.getSession().removeAttribute("judgeset");
+//        request.getSession().removeAttribute("manyset");
+        for (Integer i:set){
+            answer = request.getParameter("s_"+i+"");
+            String correct = questionService.getById(i).getCorrectSelect();
+            if (answer!=null&&answer.equals(correct)){
+                sum+=2;
             }
         }
-        List<ManyQuestion> manyQuestions = questionService.getAllMany();
-        for (ManyQuestion many: manyQuestions){
-            String []answers = request.getParameterValues(many.getId()+singleQuestions.size()+"");
+        for (Integer i:manySet){
+            String []answers = request.getParameterValues("m_"+i+"");
+            String correct = questionService.getManyById(i).getCorrectSelect();
             answer = "";
             if (answers!= null)
             {
-                for(int i = 0;i<answers.length;i++)
+                for(int j = 0;j<answers.length;j++)
                 {
-                    if (answers[i]!=null) {
-                        answer +=answers[i];
+                    if (answers[j]!=null) {
+                        answer +=answers[j];
                     }
                 }
             }
-
             //log.debug(answer);
-           if (answer!= null && answer.equals(many.getCorrectSelect()))
-           {
-               sum++;
-           }
-        }
-        List<JudgeQuestion> judgeQuestions = questionService.getAllJudge();
-        for (JudgeQuestion judge:judgeQuestions){
-            answer = request.getParameter(judge.getId()+manyQuestions.size()+singleQuestions.size()+"");
-            if(answer!=null&&answer.equals(judge.getAnswer()))
+            if (answer!= null && answer.equals(correct))
             {
-                sum++;
+                sum+=3;
             }
         }
+        for (Integer i:judgeSet){
+             answer = request.getParameter("j_"+i+"");
+            String correct = questionService.getJudgeById(i).getAnswer();
+            if (answer!=null && answer.equals(correct)){
+                sum+=1;
+            }
+        }
+        request.setAttribute("name",user.getName());
         request.setAttribute("score",sum);
+        request.setAttribute("year",TimeUtil.getYear());
+        request.setAttribute("month",TimeUtil.getMonth());
+        request.setAttribute("day",TimeUtil.getday());
         Score score = new Score();
         score.setScores(sum);
         score.setUser(user);
         userService.addScore(score);
         userService.updateScoreById(user.getId());
+        log.debug(user.getTelNo()+" "+user.getName()+" "+sum);
         request.setAttribute("time", TimeUtil.getLocalTime());
+        request.getSession().removeAttribute("user");
         return "score";
     }
 }

@@ -17,6 +17,7 @@ public class SingleQuestion {
     private String selectA;
     private String selectB;
     private String selectC;
+    private String selectD;
     private String correctSelect;
     @Column(columnDefinition = "timestamp default current_timestamp ",
             insertable = false, updatable = false)

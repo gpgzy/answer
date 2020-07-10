@@ -11,4 +11,5 @@ public interface JudgeQuestionRepository extends BaseRepository<JudgeQuestion,In
     @Modifying
     @Query("update JudgeQuestion  judge set  judge.answer =:answer where judge.id =:id")
     int setAnswerById(@Param("answer") String answer, @Param("id") int id);
+    JudgeQuestion findById(@Param("id") int id);
 }

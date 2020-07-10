@@ -1,26 +1,27 @@
 package com.example.answer.controller;
 
+import com.example.answer.component.EncryptComponent;
 import com.example.answer.component.IpUtil;
 import com.example.answer.component.LoginJudgeUtil;
 import com.example.answer.component.TimeUtil;
-import com.example.answer.entity.JudgeQuestion;
-import com.example.answer.entity.ManyQuestion;
-import com.example.answer.entity.SingleQuestion;
-import com.example.answer.entity.User;
+import com.example.answer.entity.*;
+import com.example.answer.service.BranchService;
 import com.example.answer.service.QuestionService;
 import com.example.answer.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.Query;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.net.http.HttpResponse;
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/")
@@ -30,70 +31,96 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private BranchService branchService;
+    @Autowired
+    private EncryptComponent encryptComponent;
     @GetMapping("login")
     public String hello(){
         return "login";
     }
     @PostMapping("login")
-    public String login(@RequestParam String name, @RequestParam String idCard,
-                        @RequestParam String committee,@RequestParam String branch,
+    public String   login(@RequestParam String name,
+                       @RequestParam String branch,
                         @RequestParam String telNo,@RequestParam String inputStr,
-                        HttpSession session, HttpServletRequest request){
-        if (LoginJudgeUtil.judge(name, idCard, committee, branch, telNo)==false)
+                        @RequestParam String identity,
+                        HttpSession session, HttpServletRequest request,
+                        HttpServletResponse response){
+        if (LoginJudgeUtil.judge(name, branch, telNo)==false)
             return "erro";
-        User user = new User();
-        user.setName(name);
-        user.setIdCard(idCard);
-        user.setMaxScore(0);
-        user.setCommittee(committee);
-        user.setBranch(branch);
-        user.setTelNo(telNo);
-        log.debug(user.toString());
         request.setAttribute("now", TimeUtil.getLocalTime());
         try{
             String random = (String) session.getAttribute("RANDOMVALIDATECODEKEY");
             if (random == null||!random.equals(inputStr)) {
-                log.debug("null");
                 return "erro";
             }
             else if (random.equals(inputStr)) {
-                log.debug("true");
-                log.debug(IpUtil.getIpAddr(request));
-                request.getSession().setAttribute("user",user);
-                if(userService.findUserByIdCard(idCard)==null)
+                User user = new User();
+                user.setName(name);
+                user.setMaxScore(0);
+                user.setTelNo(telNo);
+                Branch branch1 = branchService.getBranchByName(branch);
+                user.setBranch(branch1);
+                user.setIdentity(identity);
+                log.debug(user.getName()+" "+user.getTelNo()+"登录IP "+IpUtil.getIpAddr(request));
+                if(userService.getByTel(telNo)==null)
                 {
                     userService.addUser(user);
-                    request.setAttribute("message","欢迎首次答题");
                 }
-                else
-                {
-                    User user1 = userService.findUserByIdCard(idCard);
-                    Integer sc = 0;
-                    if(user1.getMaxScore()!=null)
-                    {
-                        sc = user1.getMaxScore();
+                else if (userService.getByTel(telNo).getMaxScore() !=0){
+                    return "nochance";
+                }
+                Set<Integer> singleset =  new HashSet<>();
+                    while (singleset.size()<20){
+                        int questionNo =(int)(Math.random()*174+1);
+                        singleset.add(questionNo);
                     }
-                    String max = sc+"";
-                    String times = user1.getScoreList().size()+"";
-                    String message = "你已经做题"+times+"次"+"，历史最高分为"+max+"分";
-                    request.setAttribute("message",message);
-                }
-                List<SingleQuestion> singleQuestions = questionService.getAllSingle();
-                List<ManyQuestion> manyQuestions = questionService.getAllMany();
-                List<JudgeQuestion> judgeQuestions = questionService.getAllJudge();
-                request.setAttribute("single",singleQuestions);
-                request.setAttribute("many",manyQuestions);
-                request.setAttribute("judge",judgeQuestions);
-                request.setAttribute("idCard",idCard);
-                request.setAttribute("singlesize",singleQuestions.size());
-                request.setAttribute("manysize",manyQuestions.size());
-                request.setAttribute("judgesize",judgeQuestions.size());
-                request.setAttribute("uname",user.getName());
-                return "index";
+                    //session.setAttribute("singleset",singleset);
+                    List<SingleQuestion> singleQuestions = new LinkedList<>();
+                    for (Integer i:singleset){
+                        SingleQuestion singleQuestion = questionService.getById(i);
+                        singleQuestions.add(singleQuestion);
+                    }
+                    Set<Integer> JudgeSet = new HashSet<>();
+                    while (JudgeSet.size()<15){
+                        int questionNo =(int)(Math.random()*95+1);
+                        JudgeSet.add(questionNo);
+                    }
+                    Set<Integer> manySet = new HashSet<>();
+                    while (manySet.size()<15){
+                        int questionNo =(int)(Math.random()*123+1);
+                        manySet.add(questionNo);
+                    }
+                    //session.setAttribute("judgeset",JudgeSet);
+                    //session.setAttribute("manyset",manySet);
+                    List<ManyQuestion> manyQuestions = new LinkedList<>();
+                    List<JudgeQuestion> judgeQuestions = new LinkedList<>();
+                    for (Integer i:JudgeSet){
+                        JudgeQuestion judgeQuestion = questionService.getJudgeById(i);
+                        judgeQuestions.add(judgeQuestion);
+                    }
+                    for (Integer i:manySet){
+                        ManyQuestion manyQuestion = questionService.getManyById(i);
+                        manyQuestions.add(manyQuestion);
+                    }
+                MyToken myToken = new MyToken();
+                myToken.setSingle(singleset);
+                myToken.setJudge(JudgeSet);
+                myToken.setMany(manySet);
+                String question = encryptComponent.encryptToken(myToken);
+                //log.debug(question);
+                response.setHeader("question",question);
+                request.setAttribute("question",question);
+                    request.setAttribute("tel",telNo);
+                    request.setAttribute("single",singleQuestions);
+                    request.setAttribute("judge",judgeQuestions);
+                    request.setAttribute("many",manyQuestions);
+                    request.setAttribute("uname",user.getName());
+                    return "index";
             }
         }catch (Exception e){
 
-            return "erro";
+            return "nochance";
         }
         return "index1";
     }

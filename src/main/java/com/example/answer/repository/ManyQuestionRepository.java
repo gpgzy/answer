@@ -11,4 +11,5 @@ public interface ManyQuestionRepository extends BaseRepository<ManyQuestion,Inte
     @Modifying
     @Query("update ManyQuestion  many set  many.correctSelect =:answer where many.id =:id")
     int setAnswerById(@Param("answer") String answer, @Param("id") int id);
+    ManyQuestion findById(@Param("id") int id);
 }

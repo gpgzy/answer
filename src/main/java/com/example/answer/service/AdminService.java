@@ -23,6 +23,17 @@ public class AdminService {
         }
         return false;
     }
+    public Admin getAdmin(String username,String password){
+        Admin admin = null;
+        List<Admin> list = adminRepository.findAll();
+        for (Admin a : list) {
+            if (username.equals(a.getUsername())&&password.equals(a.getPassword()))
+            {
+                admin =a;
+            }
+        }
+        return admin;
+    }
     public List<Admin> addAdmin(Admin admin){
         adminRepository.save(admin);
         return  adminRepository.findAll();

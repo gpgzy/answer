@@ -1,4 +1,8 @@
-GET http://localhost:8080/api/login
+GET http://114.116.51.209:80/ajax/branch?committee=三甲镇党委
+Accept: application/json
+
+###
+GET http://101.200.231.235 :80/ajax/branch?committee=三甲镇党委
 Accept: application/json
 
 ###

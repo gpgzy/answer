@@ -12,7 +12,7 @@
 <body>
 <div class="page">
     <div class="loginwarrp">
-        <div class="logo">管理员登陆</div>
+        <div class="logo">管理员登录</div>
         <div class="login_form">
             <form id="Login" name="Login"  action="/api/admin/setanswer" method="post">
                 <li class="login-item">

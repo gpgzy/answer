@@ -51,5 +51,13 @@ public class QuestionService {
     public int updateJudgeAnswer(int id,String answer){
         return judgeQuestionRepository.setAnswerById(answer,id);
     }
-
+    public SingleQuestion getById(int id){
+        return singleQuestionRepository.findById(id);
+    }
+    public ManyQuestion getManyById(int id){
+        return manyQuestionRepository.findById(id);
+    }
+    public JudgeQuestion getJudgeById(int id){
+        return judgeQuestionRepository.findById(id);
+    }
 }

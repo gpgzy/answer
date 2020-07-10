@@ -17,6 +17,9 @@ public class ManyQuestion {
     private String selectA;
     private String selectB;
     private String selectC;
+    private String selectD;
+    private String selectE;
+    private String selectF;
     private String correctSelect;
     @Column(columnDefinition = "timestamp default current_timestamp ",
             insertable = false, updatable = false)

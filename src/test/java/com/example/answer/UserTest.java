@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Slf4j
-@Rollback(value = false)
+@Rollback
 @Transactional
 public class UserTest {
     @Autowired
@@ -22,18 +22,18 @@ public class UserTest {
     private UserService userService;
     @Test
     public void test_finduser(){
-        log.debug(userRepository.findByIdCard("140581199911190018").toString());
+        //log.debug(userRepository.findByIdCard("140581199911190013").toString());
     }
     @Test
     public void test_updateScore(){
-        log.debug("{}",userRepository.updateMaxScoreById(60,1));
+        //log.debug("{}",userRepository.updateMaxScoreById(60,1));
     }
     @Test
     public void test_UserUtil(){
-        UserUtil userUtil = new UserUtil();
-        User user = userRepository.findById(3);
-        //log.debug(user.toString());
-        log.debug("{}", userUtil.maxScore(user.getScoreList()));
-        userService.updateScoreById(3);
+//        UserUtil userUtil = new UserUtil();
+//        User user = userRepository.findById(1);
+//        //log.debug(user.toString());
+//        log.debug("{}", userUtil.maxScore(user.getScoreList()));
+//        userService.updateScoreById(1);
     }
 }

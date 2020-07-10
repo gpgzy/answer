@@ -295,9 +295,10 @@
             <#list single as s >
                 <span class="all"><li>  ${s.question}</li></span>
                 <div class="choice">
-                    <label><input type="radio"  name="${s.id}" value="A" />A.${s.selectA}</label><br/>
-                    <label><input type="radio" name="${s.id}" value="B"/>B.${s.selectB}</label><br/>
-                    <label><input type="radio" name="${s.id}" value="C"/>C.${s.selectC}</label><br/>
+                    <label><input type="radio"  name="${s.id}" value="A" />${s.selectA}</label><br/>
+                    <label><input type="radio" name="${s.id}" value="B"/>${s.selectB}</label><br/>
+                    <label><input type="radio" name="${s.id}" value="C"/>${s.selectC}</label><br/>
+                    <label><input type="radio" name="${s.id}" value="D"/>${s.selectD}</label><br/>
                     <p>原答案：${s.correctSelect}</p>
                 </div>
             </#list>
@@ -310,10 +311,14 @@
             <#list many as s >
                 <span class="all"><li>${s.question}</li></span>
                 <div class="choicem">
-                    <label><input type="checkbox" name="${s.id+singlesize}" value="A"/>A.${s.selectA}</label><br/>
-                    <label><input type="checkbox" name="${s.id+singlesize}" value="B"/>B.${s.selectB}</label><br/>
-                    <label><input type="checkbox" name="${s.id+singlesize}" value="C"/>C.${s.selectC}</label><br/>
-
+                    <label><input type="checkbox" name="${s.id+singlesize}" value="A"/>${s.selectA}</label><br/>
+                    <label><input type="checkbox" name="${s.id+singlesize}" value="B"/>${s.selectB}</label><br/>
+                    <label><input type="checkbox" name="${s.id+singlesize}" value="C"/>${s.selectC}</label><br/>
+                    <label><input type="checkbox" name="${s.id}" value="D"/>${s.selectD}</label><br/>
+                    <#if s.selectE?exists> <label><input type="checkbox" name="${s.id}" value="E"/>${s.selectE}</label><br/>
+                    </#if>
+                    <#if s.selectF?exists> <label><input type="checkbox" name="${s.id}" value="F"/>${s.selectF}</label><br/>
+                    </#if>
                     <p>原答案：${s.correctSelect}</p>
                 </div>
             </#list>
